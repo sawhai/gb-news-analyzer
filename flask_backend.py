@@ -246,6 +246,44 @@ def get_analysis_results(session_id):
     
     return jsonify(session.results)
 
+@app.route("/api/analysis/<session_id>/download", methods=["GET"])
+def download_analysis_report(session_id):
+    """Download analysis report"""
+    if session_id not in analysis_sessions:
+        return jsonify({"error": "Session not found"}), 404
+    
+    session = analysis_sessions[session_id]
+    
+    if not session.results:
+        return jsonify({"error": "Results not ready"}), 202
+    
+    try:
+        if hasattr(session, "report_path") and session.report_path:
+            report_path = session.report_path
+            
+            if os.path.exists(report_path):
+                # Extract filename from path
+                original_filename = os.path.basename(report_path)
+                
+                print(f"📥 Serving Word report: {original_filename}")
+                
+                return send_file(
+                    report_path,
+                    as_attachment=True,
+                    download_name=original_filename,
+                    mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                )
+            else:
+                print(f"❌ Word report not found at: {report_path}")
+                return jsonify({"error": "Word report file not found"}), 404
+        else:
+            print(f"❌ No Word report found for session {session_id}")
+            return jsonify({"error": "No report available for download"}), 404
+            
+    except Exception as e:
+        print(f"❌ Download error: {e}")
+        return jsonify({"error": f"Failed to create download: {str(e)}"}), 500
+
 @app.route('/api/analysis/<session_id>/stop', methods=['POST'])
 def stop_analysis(session_id):
     """Stop a running analysis"""
