@@ -1,0 +1,16 @@
+flask==3.0.0
+flask-cors==4.0.0
+nest-asyncio==1.5.8
+python-dotenv==1.0.1
+playwright==1.52.0
+requests==2.32.3
+PyMuPDF==1.25.3
+langchain-openai==0.3.9
+python-docx==1.1.0
+Pillow==10.4.0
+aiofiles==24.1.0
+langchain-core==0.3.59
+langchain==0.3.25
+numpy==2.2.0
+greenlet==3.1.1
+pyee==13.0.0

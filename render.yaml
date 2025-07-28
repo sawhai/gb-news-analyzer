@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gb-news-analyzer
+    env: python
+    plan: starter
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt && playwright install chromium"
+    startCommand: "python flask_backend.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.16
